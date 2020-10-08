@@ -12,7 +12,4 @@ defmodule LogflareTelemetry do
       :world
 
   """
-  def hello do
-    :world
-  end
 end
