@@ -35,6 +35,8 @@ defmodule LogflareTelemetry.Application do
       # BEAM
       # {Reporters.BEAM, config},
       # {Aggregators.BEAM, config},
+      {Reporters.Phoenix, config},
+      {Aggregators.Phoenix, config}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -54,6 +56,10 @@ defmodule LogflareTelemetry.Application do
         ecto: %{
           metrics: metrics(:beam),
           tick_interval: 1_000
+        phoenix: %{
+          metrics: metrics(:phoenix),
+          tick_interval: 1_000
+        },
         }
       }
     )
@@ -74,9 +80,28 @@ defmodule LogflareTelemetry.Application do
     vm_memory = [:vm, :memory]
     vm_total_run_queue_lengths = [:vm, :total_run_queue_lengths]
 
+  def metrics(:phoenix) do
     [
-      ExtMetrics.last_values(vm_memory),
-      ExtMetrics.last_values(vm_total_run_queue_lengths)
+      LogflareMetrics.every([:phoenix, :endpoint, :stop])
+    ]
+  end
+
+  def metrics(:phoenix_all) do
+    # Phoenix Metrics
+    [
+      LogflareMetrics.every([:phoenix, :endpoint, :stop, :duration],
+        unit: {:native, :millisecond}
+      ),
+      LogflareMetrics.every([:phoenix, :router_dispatch, :stop, :duration],
+        tags: [:route],
+        unit: {:native, :millisecond}
+      ),
+      LogflareMetrics.every([:phoenix, :router_dispatch, :exception]),
+      LogflareMetrics.every([:phoenix, :error_rendered]),
+      LogflareMetrics.every([:phoenix, :channel_joined]),
+      LogflareMetrics.every([:phoenix, :channel_handled_in])
+    ]
+  end
     ]
   end
 end
