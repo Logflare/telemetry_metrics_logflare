@@ -1,4 +1,4 @@
-defmodule LogflareTelemetry.ExtendedMetrics do
+defmodule LogflareTelemetry.LogflareMetrics do
   @moduledoc false
   defmodule Every do
     @moduledoc false

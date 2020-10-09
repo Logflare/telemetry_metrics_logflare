@@ -1,4 +1,4 @@
-defmodule LogflareTelemetry.Reporters.V0.Ecto do
+defmodule LogflareTelemetry.Reporters.Ecto do
   @moduledoc """
   Custom LogflareTelemetry reporter for handling Ecto repos telemetry events
   """
@@ -7,9 +7,10 @@ defmodule LogflareTelemetry.Reporters.V0.Ecto do
   @env Application.get_env(:logflare, :env)
   alias LogflareTelemetry, as: LT
   alias LT.Reporters.Gen.V0, as: Reporter
-  alias LT.Reporters.Ecto.Transformer.V0, as: Transformer
+  alias LT.Reporters.Ecto.Transformer.V0, as: EctoTransformer
+  alias LogflareTelemetry.Transformer
   alias LT.MetricsCache
-  alias LT.ExtendedMetrics, as: ExtMetrics
+  alias LT.LogflareMetrics
 
   require Logger
 
@@ -30,7 +31,7 @@ defmodule LogflareTelemetry.Reporters.V0.Ecto do
   end
 
   def attach_handlers(metrics) do
-    Logger.debug("Logflare Telemetry Ecto Reporter is attaching handlers")
+    Logger.warn("Logflare Telemetry Ecto Reporter is attaching handlers")
 
     metrics
     |> Enum.group_by(& &1.event_name)
@@ -44,15 +45,14 @@ defmodule LogflareTelemetry.Reporters.V0.Ecto do
     Enum.map(metrics, &handle_metric(&1, measurements, metadata))
   end
 
-  def handle_metric(%ExtMetrics.Every{} = metric, measurements, metadata) do
-    tele_event =
-      metadata
-      |> Transformer.prepare_metadata()
-      |> Map.merge(%{
-        measurements: Transformer.prepare_measurements(measurements)
-      })
+  def handle_metric(%LogflareMetrics.Every{} = metric, measurements, metadata) do
+    tele_event = %{
+      measurements: measurements,
+      ecto: EctoTransformer.prepare_metadata(metadata)
+    }
 
-    MetricsCache.push(metric, tele_event)
+    payload = Transformer.event_to_payload(metric, tele_event)
+    MetricsCache.push(metric, payload)
   end
 
   def handle_metric(metric, measurements, metadata) do

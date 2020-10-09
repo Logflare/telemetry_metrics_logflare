@@ -5,7 +5,7 @@ defmodule LogflareTelemetry.Transformer do
 
   alias Telemetry.Metrics.{Counter, Distribution, LastValue, Sum, Summary}
   alias LogflareTelemetry, as: LT
-  alias LT.ExtendedMetrics, as: ExtMetrics
+  alias LT.LogflareMetrics
   alias LT.Enricher
   @default_schema_type :nested
 
@@ -13,17 +13,18 @@ defmodule LogflareTelemetry.Transformer do
     metric = telem_metric.name ++ [metric_to_type(telem_metric)]
     metric = clean_metric(metric)
 
-    metadata =
+    {measurements, meta} = Map.pop(value, :measurements)
+
+    measurements =
       metric
       |> Enum.reverse()
-      |> Enum.reduce(value, fn
+      |> Enum.reduce(measurements, fn
         key, acc -> %{key => acc}
       end)
-      |> MapKeys.to_strings()
 
     metadata =
       Map.merge(
-        metadata,
+        meta,
         %{
           "context" => %{
             "beam" => Enricher.beam_context()
@@ -32,27 +33,25 @@ defmodule LogflareTelemetry.Transformer do
       )
 
     %{
-      "metadata" => metadata,
+      "metadata" => Map.merge(metadata, measurements),
       "message" => Enum.join(metric, ".")
     }
+    |> MapKeys.to_strings()
   end
 
   def event_to_payload(telem_metric, value, %{schema_type: :flat}) do
     metric = telem_metric.name ++ [metric_to_type(telem_metric)]
     key = Enum.join(metric, ".")
-    val = MapKeys.to_strings(value)
 
-    Iteraptor.to_flatmap(%{key => val})
+    Iteraptor.to_flatmap(%{key => value})
   end
 
-  def event_to_payload(metric, val, config) do
+  def event_to_payload(metric, val, config \\ %{}) do
     config = Map.put_new(config, :schema_type, @default_schema_type)
 
     case metric do
-      %ExtMetrics.Every{} ->
-        for value <- val do
-          event_to_payload(metric, value, config)
-        end
+      %LogflareMetrics.Every{} ->
+        event_to_payload(metric, val, config)
 
       %Summary{} ->
         val = prepare_summary_payload(val)
@@ -90,6 +89,6 @@ defmodule LogflareTelemetry.Transformer do
   def metric_to_type(%Counter{}), do: :counter
   def metric_to_type(%Distribution{}), do: :distribution
   def metric_to_type(%Sum{}), do: :sum
-  def metric_to_type(%ExtMetrics.LastValues{}), do: :last_values
-  def metric_to_type(%ExtMetrics.Every{}), do: :every
+  def metric_to_type(%LogflareMetrics.LastValues{}), do: :last_values
+  def metric_to_type(%LogflareMetrics.Every{}), do: :every
 end
