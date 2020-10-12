@@ -26,7 +26,7 @@ defmodule LogflareTelemetry.PhoenixReporterTest do
         %{conn: %{assigns: %{should_not_be_received: true}}}
       )
 
-      assert_receive %{measurements: ^measurements, metadata: metadata}
+      assert_receive %{measurements: ^measurements, phx: metadata}
       refute get_in(metadata, [:conn, :assigns, :should_not_be_received])
     end
   end

@@ -7,7 +7,7 @@ defmodule LogflareTelemetry.BeamReporterTest do
     test "handles vm events" do
       MetricsCache
       |> stub
-      |> expect(:put, 2, fn metric, tele_event ->
+      |> expect(:put, 3, fn metric, tele_event ->
         send(self(), tele_event)
       end)
 
@@ -24,12 +24,11 @@ defmodule LogflareTelemetry.BeamReporterTest do
       }
 
       :telemetry.execute([:vm, :memory], measurements, %{})
-
-      assert_receive ^measurements
+      assert_receive %{measurements: ^measurements}
 
       measurements = %{cpu: 1, io: 0, total: 1}
       :telemetry.execute([:vm, :total_run_queue_lengths], measurements, %{})
-      assert_receive ^measurements
+      assert_receive %{measurements: ^measurements}
 
       measurements = %{
         atom_count: 41147,
@@ -38,7 +37,7 @@ defmodule LogflareTelemetry.BeamReporterTest do
       }
 
       :telemetry.execute([:vm, :system_counts], measurements, %{})
-      assert_receive ^measurements
+      assert_receive %{measurements: ^measurements}
     end
   end
 end
