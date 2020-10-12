@@ -7,8 +7,8 @@ defmodule LogflareTelemetry.Application do
 
   alias Telemetry.Metrics
   alias LogflareTelemetry, as: LT
-  alias LT.{Reporters, Aggregators}
-  alias LT.RawMetrics
+  alias LT.{Reporters, Aggregators, Pollers}
+  alias LT.LogflareMetrics
   alias LT.MetricsCache
   alias LT.Config
   alias LogflareTelemetry.BatchCache
@@ -31,10 +31,12 @@ defmodule LogflareTelemetry.Application do
       BatchCache,
       # Ecto
       {Reporters.Ecto, config},
-      {Aggregators.Ecto, config}
+      {Aggregators.Ecto, config},
       # BEAM
-      # {Reporters.BEAM, config},
-      # {Aggregators.BEAM, config},
+      {Reporters.BEAM, config},
+      {Aggregators.BEAM, config},
+      {Pollers.BEAM, config},
+      # Phoenix
       {Reporters.Phoenix, config},
       {Aggregators.Phoenix, config}
     ]
@@ -53,32 +55,44 @@ defmodule LogflareTelemetry.Application do
           metrics: metrics(:beam),
           tick_interval: 1_000
         },
-        ecto: %{
-          metrics: metrics(:beam),
+        broadway: %{
+          metrics: metrics(:broadway),
           tick_interval: 1_000
+        },
         phoenix: %{
           metrics: metrics(:phoenix),
           tick_interval: 1_000
         },
-        }
+        ecto: Map.new(config.ecto) |> Map.merge(%{metrics: metrics(:ecto), tick_interval: 1_000})
       }
     )
   end
 
   def metrics(:ecto) do
-    event_id = [:logflare, :repo, :query]
+    event_ids = [
+      [:logflare, :repo, :init],
+      [:logflare, :repo, :query]
+    ]
+
     measurement_names = ~w[decode_time query_time queue_time total_time]a
 
-    measurement_names
-    |> Enum.map(&[Metrics.summary(event_id ++ [&1])])
-    |> Enum.concat([ExtMetrics.every(event_id)])
-    |> List.flatten()
+    for id <- event_ids do
+      LogflareMetrics.every(id)
+    end
   end
 
   def metrics(:beam) do
-    # last atom is required to subscribe to the teleemetry events but is irrelevant as all measurements are collected
     vm_memory = [:vm, :memory]
     vm_total_run_queue_lengths = [:vm, :total_run_queue_lengths]
+    vm_system_counts = [:vm, :system_counts]
+
+    # last atom is required to subscribe to the telemetry events but is irrelevant as all measurements are collected
+    [
+      # LogflareMetrics.last_values(vm_memory),
+      LogflareMetrics.last_values(vm_total_run_queue_lengths),
+      LogflareMetrics.last_values(vm_system_counts)
+    ]
+  end
 
   def metrics(:phoenix) do
     [
@@ -86,16 +100,11 @@ defmodule LogflareTelemetry.Application do
     ]
   end
 
-  def metrics(:phoenix_all) do
+  def metrics(:phoenix, :all) do
     # Phoenix Metrics
     [
-      LogflareMetrics.every([:phoenix, :endpoint, :stop, :duration],
-        unit: {:native, :millisecond}
-      ),
-      LogflareMetrics.every([:phoenix, :router_dispatch, :stop, :duration],
-        tags: [:route],
-        unit: {:native, :millisecond}
-      ),
+      LogflareMetrics.every([:phoenix, :endpoint, :stop, :duration]),
+      LogflareMetrics.every([:phoenix, :router_dispatch, :stop, :duration]),
       LogflareMetrics.every([:phoenix, :router_dispatch, :exception]),
       LogflareMetrics.every([:phoenix, :error_rendered]),
       LogflareMetrics.every([:phoenix, :channel_joined]),

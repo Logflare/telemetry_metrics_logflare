@@ -7,7 +7,7 @@ defmodule LogflareTelemetry.Reporters.Phoenix do
   require Logger
   @env Mix.env()
   alias LogflareTelemetry, as: LT
-  alias LT.Reporters.Gen.V0, as: Reporter
+  alias LT.Reporters.Gen, as: Reporter
   alias LT.MetricsCache
   alias LT.LogflareMetrics
   require Logger
@@ -15,7 +15,7 @@ defmodule LogflareTelemetry.Reporters.Phoenix do
   @default_conn_keys [
     :method,
     :host,
-    :params,
+    # :params,
     :path_info,
     :port,
     :remote_ip,
@@ -67,14 +67,12 @@ defmodule LogflareTelemetry.Reporters.Phoenix do
 
   def handle_metric(%LogflareMetrics.Every{} = metric, measurements, metadata) do
     tele_event = %{
-      metadata: prepare_metadata(metadata.conn),
+      phx: prepare_metadata(metadata.conn),
       measurements: measurements
     }
 
     MetricsCache.push(metric, tele_event)
   end
-
-  kk
 
   def handle_metric(metric, measurements, metadata) do
     Reporter.handle_metric(metric, measurements, metadata)
@@ -83,7 +81,7 @@ defmodule LogflareTelemetry.Reporters.Phoenix do
   def prepare_metadata(metadata) do
     metadata
     |> Map.take(@default_conn_keys)
-    |> Map.update!(:remote_ip, &(:inet.ntoa(&1) |> to_string))
+    |> Map.update(:remote_ip, nil, &(:inet.ntoa(&1) |> to_string))
     |> Enum.map(fn
       {k, v} when k in @default_conn_keys and is_number(v) ->
         {k, v}
@@ -99,6 +97,10 @@ defmodule LogflareTelemetry.Reporters.Phoenix do
 
       kv ->
         kv
+    end)
+    |> Enum.filter(fn
+      {k, nil} -> false
+      _ -> true
     end)
     |> Map.new()
   end

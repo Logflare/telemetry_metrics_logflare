@@ -6,8 +6,8 @@ defmodule LogflareTelemetry.Reporters.Ecto do
   require Logger
   @env Application.get_env(:logflare, :env)
   alias LogflareTelemetry, as: LT
-  alias LT.Reporters.Gen.V0, as: Reporter
-  alias LT.Reporters.Ecto.Transformer.V0, as: EctoTransformer
+  alias LT.Reporters.Gen, as: Reporter
+  alias LT.Reporters.Ecto.Transformer, as: EctoTransformer
   alias LogflareTelemetry.Transformer
   alias LT.MetricsCache
   alias LT.LogflareMetrics
@@ -25,7 +25,7 @@ defmodule LogflareTelemetry.Reporters.Ecto do
       Process.flag(:trap_exit, true)
     end
 
-    attach_handlers(config.metrics)
+    attach_handlers(config.ecto.metrics)
 
     {:ok, %{}}
   end
@@ -51,8 +51,7 @@ defmodule LogflareTelemetry.Reporters.Ecto do
       ecto: EctoTransformer.prepare_metadata(metadata)
     }
 
-    payload = Transformer.event_to_payload(metric, tele_event)
-    MetricsCache.push(metric, payload)
+    MetricsCache.push(metric, tele_event)
   end
 
   def handle_metric(metric, measurements, metadata) do

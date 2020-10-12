@@ -1,4 +1,4 @@
-defmodule LogflareTelemetry.Aggregators.V0.Ecto do
+defmodule LogflareTelemetry.Aggregators.Ecto do
   @moduledoc """
   Aggregates Ecto telemetry metrics
   """
@@ -17,20 +17,19 @@ defmodule LogflareTelemetry.Aggregators.V0.Ecto do
 
   @impl true
   def init(%Config{} = config) do
-    Process.send_after(self(), :tick, config.tick_interval)
+    Process.send_after(self(), :tick, config.ecto.tick_interval)
     {:ok, %{config: config}}
   end
 
   @impl true
-  def handle_info(:tick, %{config: %Config{} = config} = state) do
-    for metric <- config.metrics do
+  def handle_info(:tick, %{config: config} = state) do
+    for metric <- config.ecto.metrics do
       value = MetricsCache.get(metric)
 
       {:ok, value} =
         case metric do
           %Summary{} ->
-            value
-            |> case do
+            case value do
               {:ok, nil} ->
                 {:ok, nil}
 
@@ -54,7 +53,7 @@ defmodule LogflareTelemetry.Aggregators.V0.Ecto do
       MetricsCache.reset(metric)
     end
 
-    Process.send_after(self(), :tick, config.tick_interval)
+    Process.send_after(self(), :tick, config.ecto.tick_interval)
     {:noreply, state}
   end
 end

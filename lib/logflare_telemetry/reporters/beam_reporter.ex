@@ -5,7 +5,6 @@ defmodule LogflareTelemetry.Reporters.BEAM do
   use GenServer
   require Logger
   @env Mix.env()
-  # @env Application.get_env(:logflare_telemetry, :env)
   alias LogflareTelemetry.MetricsCache
   alias LogflareTelemetry, as: LT
   alias LT.LogflareMetrics
@@ -39,8 +38,11 @@ defmodule LogflareTelemetry.Reporters.BEAM do
   end
 
   def handle_metric(%LogflareMetrics.LastValues{} = metric, measurements, _metadata) do
-    measurement = extract_measurement(metric, measurements)
-    MetricsCache.put(metric, measurement)
+    tele_event = %{
+      measurements: extract_measurement(metric, measurements)
+    }
+
+    MetricsCache.put(metric, tele_event)
   end
 
   def terminate(_, events) do

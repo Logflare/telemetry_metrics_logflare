@@ -1,4 +1,4 @@
-defmodule LogflareTelemetry.Reporters.Gen.V0 do
+defmodule LogflareTelemetry.Reporters.Gen do
   use GenServer
   require Logger
   @env Application.get_env(:logflare, :env)

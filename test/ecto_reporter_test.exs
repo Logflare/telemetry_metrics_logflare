@@ -6,7 +6,7 @@ defmodule LogflareTelemetry.EctoReporterTest do
   @telem_used_by_app :logflare
 
   describe "Ecto reporter" do
-    test "handles ecto telemetry event" do
+    test "handles repo query event" do
       MetricsCache
       |> expect(:push, fn metric, tele_event ->
         send(self(), tele_event)
@@ -43,28 +43,13 @@ defmodule LogflareTelemetry.EctoReporterTest do
       )
 
       assert_receive %{
-        "message" => "repo.query.every",
-        "metadata" => %{
-          "context" => %{
-            "beam" => %{"node" => "nonode@nohost"}
-          },
-          "ecto" => %{
-            "params" => "[1]",
-            "query" => "SELECT * FROM table",
-            "repo" => "Logflare.Repo",
-            "source" => "table"
-          },
-          "repo" => %{
-            "query" => %{
-              "every" => %{
-                "compile_time" => 2,
-                "decode_time" => 1,
-                "queue_time" => 3,
-                "total_time" => 6
-              }
-            }
-          }
-        }
+        ecto: %{
+          params: "[1]",
+          query: "SELECT * FROM table",
+          repo: "Logflare.Repo",
+          source: "table"
+        },
+        measurements: %{compile_time: 2, decode_time: 1, queue_time: 3, total_time: 6}
       }
     end
   end

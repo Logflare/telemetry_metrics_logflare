@@ -9,11 +9,36 @@ defmodule LogflareTelemetry.Transformer do
   alias LT.Enricher
   @default_schema_type :nested
 
-  def event_to_payload(telem_metric, value, %{schema_type: :nested}) do
+  def event_to_payload(metric, val, config \\ %{}) do
+    config = Map.put_new(config, :schema_type, @default_schema_type)
+
+    case metric do
+      %LogflareMetrics.Every{} ->
+        val
+        |> List.wrap()
+        |> Enum.map(&do_event_to_payload(metric, &1, config))
+
+      %Summary{} ->
+        val = prepare_summary_payload(val)
+        do_event_to_payload(metric, val, config)
+
+      _ ->
+        do_event_to_payload(metric, val, config)
+    end
+  end
+
+  def do_event_to_payload(telem_metric, value, %{schema_type: :nested}) do
     metric = telem_metric.name ++ [metric_to_type(telem_metric)]
     metric = clean_metric(metric)
 
-    {measurements, meta} = Map.pop(value, :measurements)
+    {measurements, meta} =
+      case value do
+        [value] ->
+          Map.pop(value, :measurements)
+
+        %{} = value ->
+          Map.pop(value, :measurements)
+      end
 
     measurements =
       metric
@@ -39,27 +64,11 @@ defmodule LogflareTelemetry.Transformer do
     |> MapKeys.to_strings()
   end
 
-  def event_to_payload(telem_metric, value, %{schema_type: :flat}) do
+  def do_event_to_payload(telem_metric, value, %{schema_type: :flat}) do
     metric = telem_metric.name ++ [metric_to_type(telem_metric)]
     key = Enum.join(metric, ".")
 
     Iteraptor.to_flatmap(%{key => value})
-  end
-
-  def event_to_payload(metric, val, config \\ %{}) do
-    config = Map.put_new(config, :schema_type, @default_schema_type)
-
-    case metric do
-      %LogflareMetrics.Every{} ->
-        event_to_payload(metric, val, config)
-
-      %Summary{} ->
-        val = prepare_summary_payload(val)
-        event_to_payload(metric, val, config)
-
-      _ ->
-        event_to_payload(metric, val, config)
-    end
   end
 
   def clean_metric([first | rest] = metric) do

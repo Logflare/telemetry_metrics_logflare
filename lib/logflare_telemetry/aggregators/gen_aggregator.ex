@@ -2,20 +2,22 @@ defmodule LogflareTelemetry.Aggregators.GenAggregator do
   alias LogflareTelemetry, as: LT
   alias LT.MetricsCache
   alias LT.Transformer
+  alias LT.BatchCache
 
   def dispatch(metric, value, config) do
-    backend = config.backend
-
     if measurement_exists?(value) do
-      :ok =
-        metric
-        |> Transformer.event_to_payload(value, config)
-        |> List.wrap()
-        # |> transform_to_logs_ingest_dispatch()
-        |> backend.ingest()
+      metric
+      |> Transformer.event_to_payload(value, config)
+      |> List.wrap()
+      |> transform_to_logs_ingest_dispatch()
+      |> Enum.map(&put(&1, config))
     end
 
     MetricsCache.reset(metric)
+  end
+
+  def put(%{"message" => m, "metadata" => meta} = ev, config) do
+    BatchCache.put(ev, config)
   end
 
   def measurement_exists?(nil), do: false
@@ -34,10 +36,7 @@ defmodule LogflareTelemetry.Aggregators.GenAggregator do
         message
         |> String.replace("logflare.", "")
 
-      %{
-        "metadata" => value,
-        "message" => message
-      }
+      value
     end
   end
 end
