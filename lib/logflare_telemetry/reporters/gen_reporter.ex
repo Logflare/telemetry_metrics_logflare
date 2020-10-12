@@ -1,7 +1,7 @@
 defmodule LogflareTelemetry.Reporters.Gen do
   use GenServer
   require Logger
-  @env Application.get_env(:logflare, :env)
+  @env Mix.env()
 
   alias Telemetry.Metrics.{Counter, Distribution, LastValue, Sum, Summary}
   alias LogflareTelemetry.MetricsCache

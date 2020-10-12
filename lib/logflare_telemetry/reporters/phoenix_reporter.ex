@@ -99,7 +99,7 @@ defmodule LogflareTelemetry.Reporters.Phoenix do
         kv
     end)
     |> Enum.filter(fn
-      {k, nil} -> false
+      {_k, nil} -> false
       _ -> true
     end)
     |> Map.new()

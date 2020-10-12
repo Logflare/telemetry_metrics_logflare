@@ -33,7 +33,7 @@ defmodule LogflareTelemetry.Reporters.BEAM do
     end)
   end
 
-  def handle_event(event_name, measurements, metadata, metrics) do
+  def handle_event(_event_name, measurements, metadata, metrics) do
     Enum.map(metrics, &handle_metric(&1, measurements, metadata))
   end
 
@@ -45,7 +45,9 @@ defmodule LogflareTelemetry.Reporters.BEAM do
     MetricsCache.put(metric, tele_event)
   end
 
+  @impl true
   def terminate(_, events) do
+    Logger.warn("Logflare Telemetry BEAM Reporter is detaching handlers!")
     Enum.each(events, &:telemetry.detach({__MODULE__, &1, self()}))
     :ok
   end

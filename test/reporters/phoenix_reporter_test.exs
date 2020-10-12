@@ -11,7 +11,7 @@ defmodule LogflareTelemetry.PhoenixReporterTest do
       |> expect(
         :push,
         1,
-        fn metric, tele_event ->
+        fn _metric, tele_event ->
           send(self(), tele_event)
         end
       )

@@ -64,13 +64,6 @@ defmodule LogflareTelemetry.Transformer do
     |> MapKeys.to_strings()
   end
 
-  def do_event_to_payload(telem_metric, value, %{schema_type: :flat}) do
-    metric = telem_metric.name ++ [metric_to_type(telem_metric)]
-    key = Enum.join(metric, ".")
-
-    Iteraptor.to_flatmap(%{key => value})
-  end
-
   def clean_metric([first | rest] = metric) do
     if first === :logflare do
       rest

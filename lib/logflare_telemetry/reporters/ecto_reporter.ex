@@ -4,11 +4,10 @@ defmodule LogflareTelemetry.Reporters.Ecto do
   """
   use GenServer
   require Logger
-  @env Application.get_env(:logflare, :env)
+  @env Mix.env()
   alias LogflareTelemetry, as: LT
   alias LT.Reporters.Gen, as: Reporter
   alias LT.Reporters.Ecto.Transformer, as: EctoTransformer
-  alias LogflareTelemetry.Transformer
   alias LT.MetricsCache
   alias LT.LogflareMetrics
 
@@ -31,7 +30,7 @@ defmodule LogflareTelemetry.Reporters.Ecto do
   end
 
   def attach_handlers(metrics) do
-    Logger.warn("Logflare Telemetry Ecto Reporter is attaching handlers")
+    Logger.debug("Logflare Telemetry Ecto Reporter is attaching handlers")
 
     metrics
     |> Enum.group_by(& &1.event_name)
@@ -59,6 +58,7 @@ defmodule LogflareTelemetry.Reporters.Ecto do
   end
 
   def terminate(_, events) do
+    Logger.debug("Logflare Telemetry Ecto Reporter is detaching handlers!")
     Enum.each(events, &:telemetry.detach({__MODULE__, &1, self()}))
     :ok
   end

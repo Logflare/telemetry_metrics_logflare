@@ -45,7 +45,7 @@ defmodule LogflareTelemetry.MixProject do
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:sobelow, ">= 0.0.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.11", only: :test, runtime: false},
-      {:logflare_logger_backend, "~> 0.7"}
+      {:bertex, "~> 1.0"}
     ]
   end
 end

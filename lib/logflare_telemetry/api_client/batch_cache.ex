@@ -71,7 +71,7 @@ defmodule LogflareTelemetry.BatchCache do
   end
 
   @spec post_logs(list(map), Config.t()) :: {:ok, Tesla.Env.t()} | {:error, term}
-  def post_logs(events, %Config{api_client: api_client, source_id: source_id} = config)
+  def post_logs(events, %Config{api_client: _api_client, source_id: source_id} = config)
       when is_list(events) do
     config |> ApiClient.new() |> ApiClient.post_logs(events, source_id)
   end

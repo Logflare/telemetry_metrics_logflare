@@ -5,7 +5,6 @@ defmodule LogflareTelemetry.Application do
 
   use Application
 
-  alias Telemetry.Metrics
   alias LogflareTelemetry, as: LT
   alias LT.{Reporters, Aggregators, Pollers}
   alias LT.LogflareMetrics
@@ -13,7 +12,6 @@ defmodule LogflareTelemetry.Application do
   alias LT.Config
   alias LogflareTelemetry.BatchCache
   alias LogflareTelemetry.ApiClient
-  @backend Logflare.TelemetryBackend
 
   @impl true
   def start(_type, _args) do
@@ -56,7 +54,7 @@ defmodule LogflareTelemetry.Application do
           tick_interval: 1_000
         },
         broadway: %{
-          metrics: metrics(:broadway),
+          metrics: [],
           tick_interval: 1_000
         },
         phoenix: %{
@@ -74,7 +72,7 @@ defmodule LogflareTelemetry.Application do
       [:logflare, :repo, :query]
     ]
 
-    measurement_names = ~w[decode_time query_time queue_time total_time]a
+    _measurement_names = ~w[decode_time query_time queue_time total_time]a
 
     for id <- event_ids do
       LogflareMetrics.every(id)
@@ -88,7 +86,7 @@ defmodule LogflareTelemetry.Application do
 
     # last atom is required to subscribe to the telemetry events but is irrelevant as all measurements are collected
     [
-      # LogflareMetrics.last_values(vm_memory),
+      LogflareMetrics.last_values(vm_memory),
       LogflareMetrics.last_values(vm_total_run_queue_lengths),
       LogflareMetrics.last_values(vm_system_counts)
     ]
@@ -109,8 +107,6 @@ defmodule LogflareTelemetry.Application do
       LogflareMetrics.every([:phoenix, :error_rendered]),
       LogflareMetrics.every([:phoenix, :channel_joined]),
       LogflareMetrics.every([:phoenix, :channel_handled_in])
-    ]
-  end
     ]
   end
 end

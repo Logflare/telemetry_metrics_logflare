@@ -8,7 +8,7 @@ defmodule LogflareTelemetry.EctoReporterTest do
   describe "Ecto reporter" do
     test "handles repo query event" do
       MetricsCache
-      |> expect(:push, fn metric, tele_event ->
+      |> expect(:push, fn _metric, tele_event ->
         send(self(), tele_event)
       end)
 

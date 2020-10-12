@@ -7,7 +7,7 @@ defmodule LogflareTelemetry.BeamReporterTest do
     test "handles vm events" do
       MetricsCache
       |> stub
-      |> expect(:put, 3, fn metric, tele_event ->
+      |> expect(:put, 3, fn _metric, tele_event ->
         send(self(), tele_event)
       end)
 
