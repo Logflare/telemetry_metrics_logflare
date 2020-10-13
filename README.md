@@ -1,10 +1,15 @@
 # TelemetryMetricsLogflare
 
-TelemetryMetricsLogflare makes it easy to ship individual Telemetry events to Logflare to easily search and dashboard your application events.
+`TelemetryMetricsLogflare` makes it easy to ship individual `Telemetry` events to Logflare to easily search and dashboard your application events.
 
 TelemetryMetricsLogflare does not aggregate metrics in your app. It sends individual events and metadata to Logflare so you can dynamically query your metrics without having to create 10s, 1000s or millions of separate metrics. This lets you drill down to the actual events which make up an aggregation and lets you do dynamic aggregations on historical data.
 
 ## Supported Metrics
+
+### TelemetryPoller
+- [x] `[vm, memory]`
+- [x] `[vm, total_run_queue_lengths]`
+- [x] `[vm, system_counts]`
 
 ### Broadway
 https://hexdocs.pm/broadway/Broadway.html#module-telemetry
