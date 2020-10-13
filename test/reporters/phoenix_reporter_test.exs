@@ -1,7 +1,7 @@
-defmodule LogflareTelemetry.PhoenixReporterTest do
+defmodule TelemetryMetricsLogflare.PhoenixReporterTest do
   use ExUnit.Case, async: true
   use Mimic
-  alias LogflareTelemetry.MetricsCache
+  alias TelemetryMetricsLogflare.MetricsCache
   @moduletag :this
 
   describe "Phoenix reporter" do

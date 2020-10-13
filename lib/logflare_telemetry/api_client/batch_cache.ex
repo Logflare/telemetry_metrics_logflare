@@ -1,4 +1,4 @@
-defmodule LogflareTelemetry.BatchCache do
+defmodule TelemetryMetricsLogflare.BatchCache do
   @moduledoc """
   Caches the batch, dispatches API post request if the batch is larger than configured max batch size or flush is called.
   Doesn't error or drop the message if the API is unresponsive, holds them
@@ -7,8 +7,8 @@ defmodule LogflareTelemetry.BatchCache do
   @cache __MODULE__
   use Agent
 
-  alias LogflareTelemetry.Config
-  alias LogflareTelemetry.ApiClient
+  alias TelemetryMetricsLogflare.Config
+  alias TelemetryMetricsLogflare.ApiClient
 
   # batch limit prevents runaway memory usage if API is unresponsive
   @batch_limit 1000

@@ -1,10 +1,10 @@
-defmodule LogflareTelemetry.Aggregators.BEAM do
+defmodule TelemetryMetricsLogflare.Aggregators.BEAM do
   @moduledoc """
-  Aggregates Ecto telemetry metrics
+  Aggregates BEAM telemetry metrics
   """
   use GenServer
-  alias LogflareTelemetry.MetricsCache
-  alias LogflareTelemetry, as: LT
+  alias TelemetryMetricsLogflare.MetricsCache
+  alias TelemetryMetricsLogflare, as: LT
   alias LT.Aggregators.GenAggregator
   alias LT.Config
 

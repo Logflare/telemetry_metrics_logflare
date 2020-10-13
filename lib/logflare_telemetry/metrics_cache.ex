@@ -1,10 +1,10 @@
-defmodule LogflareTelemetry.MetricsCache do
+defmodule TelemetryMetricsLogflare.MetricsCache do
   @moduledoc """
   Caches the telemetry metric measurements until aggregators process them.
   """
-  @c :logflare_telemetry_measurement_cache
+  @c :telemetry_metrics_logflare_measurement_cache
   alias Telemetry.Metrics.{Counter, Summary, Sum, LastValue, Distribution}
-  alias LogflareTelemetry.LogflareMetrics
+  alias TelemetryMetricsLogflare.LogflareMetrics
 
   @type telemetry_metric :: Counter | Distribution | LastValue | Sum | Summary
 

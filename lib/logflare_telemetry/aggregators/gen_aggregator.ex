@@ -1,5 +1,5 @@
-defmodule LogflareTelemetry.Aggregators.GenAggregator do
-  alias LogflareTelemetry, as: LT
+defmodule TelemetryMetricsLogflare.Aggregators.GenAggregator do
+  alias TelemetryMetricsLogflare, as: LT
   alias LT.MetricsCache
   alias LT.Transformer
   alias LT.BatchCache

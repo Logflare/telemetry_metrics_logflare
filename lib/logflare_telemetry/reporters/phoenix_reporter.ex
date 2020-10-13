@@ -1,4 +1,4 @@
-defmodule LogflareTelemetry.Reporters.Phoenix do
+defmodule TelemetryMetricsLogflare.Reporters.Phoenix do
   @moduledoc """
   Reports Phoenix telemetry events
   """
@@ -6,7 +6,7 @@ defmodule LogflareTelemetry.Reporters.Phoenix do
   use GenServer
   require Logger
   @env Mix.env()
-  alias LogflareTelemetry, as: LT
+  alias TelemetryMetricsLogflare, as: LT
   alias LT.Reporters.Gen, as: Reporter
   alias LT.MetricsCache
   alias LT.LogflareMetrics

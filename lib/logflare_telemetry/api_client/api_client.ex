@@ -1,4 +1,4 @@
-defmodule LogflareTelemetry.ApiClient do
+defmodule TelemetryMetricsLogflare.ApiClient do
   @moduledoc false
   use Tesla, only: [:post], docs: false
   adapter(Tesla.Adapter.Hackney, pool: __MODULE__)

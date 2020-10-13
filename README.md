@@ -1,21 +1,21 @@
-# LogflareTelemetry
+# TelemetryMetricsLogflare
 
 **TODO: Add description**
 
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `logflare_telemetry` to your list of dependencies in `mix.exs`:
+by adding `telemetry_metrics_logflare` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:logflare_telemetry, "~> 0.1.0"}
+    {:telemetry_metrics_logflare, "~> 0.1.0"}
   ]
 end
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/logflare_telemetry](https://hexdocs.pm/logflare_telemetry).
+be found at [https://hexdocs.pm/telemetry_metrics_logflare](https://hexdocs.pm/telemetry_metrics_logflare).
 

@@ -1,8 +1,8 @@
-defmodule LogflareTelemetry.EctoReporterTest do
+defmodule TelemetryMetricsLogflare.EctoReporterTest do
   use ExUnit.Case, async: true
   use Mimic
-  alias LogflareTelemetry.MetricsCache
-  doctest LogflareTelemetry
+  alias TelemetryMetricsLogflare.MetricsCache
+  doctest TelemetryMetricsLogflare
   @telem_used_by_app :logflare
 
   describe "Ecto reporter" do

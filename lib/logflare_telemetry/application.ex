@@ -1,22 +1,22 @@
-defmodule LogflareTelemetry.Application do
+defmodule TelemetryMetricsLogflare.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
 
   use Application
 
-  alias LogflareTelemetry, as: LT
+  alias TelemetryMetricsLogflare, as: LT
   alias LT.{Reporters, Aggregators, Pollers}
   alias LT.LogflareMetrics
   alias LT.MetricsCache
   alias LT.Config
-  alias LogflareTelemetry.BatchCache
-  alias LogflareTelemetry.ApiClient
+  alias TelemetryMetricsLogflare.BatchCache
+  alias TelemetryMetricsLogflare.ApiClient
 
   @impl true
   def start(_type, _args) do
     config =
-      Application.get_all_env(:logflare_telemetry)
+      Application.get_all_env(:telemetry_metrics_logflare)
       |> Map.new()
 
     config = Map.put(config, :api_client, ApiClient.new(config))
@@ -41,7 +41,7 @@ defmodule LogflareTelemetry.Application do
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: LogflareTelemetry.Supervisor]
+    opts = [strategy: :one_for_one, name: TelemetryMetricsLogflare.Supervisor]
     Supervisor.start_link(children, opts)
   end
 

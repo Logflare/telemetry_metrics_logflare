@@ -1,4 +1,4 @@
-defmodule LogflareTelemetry.Reporters.Ecto.Transformer do
+defmodule TelemetryMetricsLogflare.Reporters.Ecto.Transformer do
   @moduledoc """
   Transforms Ecto telemetry events for further ingest
   """

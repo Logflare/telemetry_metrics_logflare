@@ -1,4 +1,4 @@
-defmodule LogflareTelemetry.Config do
+defmodule TelemetryMetricsLogflare.Config do
   @moduledoc false
   use TypedStruct
 

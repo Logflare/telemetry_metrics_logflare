@@ -1,5 +1,5 @@
-Mimic.copy(LogflareTelemetry.Reporters.Ecto)
-Mimic.copy(LogflareTelemetry.Reporters.BEAM)
-Mimic.copy(LogflareTelemetry.MetricsCache)
+Mimic.copy(TelemetryMetricsLogflare.Reporters.Ecto)
+Mimic.copy(TelemetryMetricsLogflare.Reporters.BEAM)
+Mimic.copy(TelemetryMetricsLogflare.MetricsCache)
 
 ExUnit.start()

@@ -1,6 +1,6 @@
 import Config
 
-config :logflare_telemetry,
+config :telemetry_metrics_logflare,
   ecto: [
     applications: :logflare
   ],

@@ -1,4 +1,4 @@
-defmodule LogflareTelemetryTest do
+defmodule TelemetryMetricsLogflareTest do
   use ExUnit.Case
-  doctest LogflareTelemetry
+  doctest TelemetryMetricsLogflare
 end

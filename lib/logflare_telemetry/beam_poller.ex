@@ -1,6 +1,6 @@
-defmodule LogflareTelemetry.Pollers.BEAM do
+defmodule TelemetryMetricsLogflare.Pollers.BEAM do
   @moduledoc false
-  @poller_name :logflare_telemetry_poller_beam
+  @poller_name :telemetry_metrics_logflare_poller_beam
   @sampling_period 1_000
 
   def child_spec(args) do

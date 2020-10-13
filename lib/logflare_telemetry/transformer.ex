@@ -1,10 +1,10 @@
-defmodule LogflareTelemetry.Transformer do
+defmodule TelemetryMetricsLogflare.Transformer do
   @moduledoc """
   Transforms telemetry metrics and events to payloads dispatched to local and/or http backends.
   """
 
   alias Telemetry.Metrics.{Counter, Distribution, LastValue, Sum, Summary}
-  alias LogflareTelemetry, as: LT
+  alias TelemetryMetricsLogflare, as: LT
   alias LT.LogflareMetrics
   alias LT.Enricher
   @default_schema_type :nested

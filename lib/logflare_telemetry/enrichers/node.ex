@@ -1,4 +1,4 @@
-defmodule LogflareTelemetry.Enricher do
+defmodule TelemetryMetricsLogflare.Enricher do
   @moduledoc """
   Adds enriched information about the BEAM and OTP to the telemetry event payloads
   """

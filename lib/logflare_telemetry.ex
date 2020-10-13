@@ -1,5 +1,5 @@
-defmodule LogflareTelemetry do
+defmodule TelemetryMetricsLogflare do
   @moduledoc """
-  Documentation for `LogflareTelemetry`.
+  Documentation for `TelemetryMetricsLogflare`.
   """
 end

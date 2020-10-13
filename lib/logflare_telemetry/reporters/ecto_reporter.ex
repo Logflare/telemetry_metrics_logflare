@@ -1,11 +1,11 @@
-defmodule LogflareTelemetry.Reporters.Ecto do
+defmodule TelemetryMetricsLogflare.Reporters.Ecto do
   @moduledoc """
-  Custom LogflareTelemetry reporter for handling Ecto repos telemetry events
+  Custom TelemetryMetricsLogflare reporter for handling Ecto repos telemetry events
   """
   use GenServer
   require Logger
   @env Mix.env()
-  alias LogflareTelemetry, as: LT
+  alias TelemetryMetricsLogflare, as: LT
   alias LT.Reporters.Gen, as: Reporter
   alias LT.Reporters.Ecto.Transformer, as: EctoTransformer
   alias LT.MetricsCache

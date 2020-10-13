@@ -1,10 +1,10 @@
-defmodule LogflareTelemetry.Reporters.Gen do
+defmodule TelemetryMetricsLogflare.Reporters.Gen do
   use GenServer
   require Logger
   @env Mix.env()
 
   alias Telemetry.Metrics.{Counter, Distribution, LastValue, Sum, Summary}
-  alias LogflareTelemetry.MetricsCache
+  alias TelemetryMetricsLogflare.MetricsCache
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts[:metrics])

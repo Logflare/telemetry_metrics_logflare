@@ -1,7 +1,7 @@
-defmodule LogflareTelemetry.BeamReporterTest do
+defmodule TelemetryMetricsLogflare.BeamReporterTest do
   use ExUnit.Case, async: true
   use Mimic
-  alias LogflareTelemetry.MetricsCache
+  alias TelemetryMetricsLogflare.MetricsCache
 
   describe "Beam reporter" do
     test "handles vm events" do

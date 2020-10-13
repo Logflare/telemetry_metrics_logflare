@@ -1,12 +1,12 @@
-defmodule LogflareTelemetry.Reporters.BEAM do
+defmodule TelemetryMetricsLogflare.Reporters.BEAM do
   @moduledoc """
-  Custom LogflareTelemetry reporter for handling BEAM telemetry events
+  Custom TelemetryMetricsLogflare reporter for handling BEAM telemetry events
   """
   use GenServer
   require Logger
   @env Mix.env()
-  alias LogflareTelemetry.MetricsCache
-  alias LogflareTelemetry, as: LT
+  alias TelemetryMetricsLogflare.MetricsCache
+  alias TelemetryMetricsLogflare, as: LT
   alias LT.LogflareMetrics
 
   def start_link(config) do

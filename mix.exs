@@ -1,17 +1,17 @@
-defmodule LogflareTelemetry.MixProject do
+defmodule TelemetryMetricsLogflare.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :logflare_telemetry,
+      app: :telemetry_metrics_logflare,
       version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: description(),
       package: package(),
-      name: "Logflare Telemetry Metrics",
-      source_url: "https://github.com/Logflare/logflare_telemetry_ex",
+      name: "Telemetry Metrics Logflare",
+      source_url: "https://github.com/Logflare/telemetry_metrics_logflare",
       homepage_url: "https://logflare.app",
       docs: [
         main: "readme",
@@ -24,7 +24,7 @@ defmodule LogflareTelemetry.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {LogflareTelemetry.Application, []}
+      mod: {TelemetryMetricsLogflare.Application, []}
     ]
   end
 
@@ -67,7 +67,7 @@ defmodule LogflareTelemetry.MixProject do
 
   defp package() do
     [
-      links: %{"GitHub" => "https://github.com/Logflare/logflare_telemetry_ex"},
+      links: %{"GitHub" => "https://github.com/Logflare/telemetry_metrics_logflare"},
       licenses: ["MIT"]
     ]
   end
