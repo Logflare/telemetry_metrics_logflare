@@ -27,7 +27,7 @@ defmodule LogflareTelemetry.MixProject do
       {:typed_struct, "~> 0.2.1"},
       {:telemetry, "~> 0.4.0"},
       {:telemetry_poller, "~> 0.5.0"},
-      {:telemetry_metrics, "~> 0.6.0", override: true},
+      {:telemetry_metrics, "~> 0.6.0"},
       {:cachex, "~> 3.0"},
       {:map_keys, "~> 0.1.0"},
 
@@ -46,6 +46,17 @@ defmodule LogflareTelemetry.MixProject do
       {:sobelow, ">= 0.0.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.11", only: :test, runtime: false},
       {:bertex, "~> 1.0"}
+    ]
+  end
+
+  defp description() do
+    "Ship your Telemetry metrics to Logflare for long term storage, easy search and flexible dashboarding."
+  end
+
+  defp package() do
+    [
+      links: %{"GitHub" => "https://github.com/Logflare/logflare_telemetry_ex"},
+      licenses: ["MIT"]
     ]
   end
 end
