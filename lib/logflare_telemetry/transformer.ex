@@ -52,7 +52,7 @@ defmodule TelemetryMetricsLogflare.Transformer do
         meta,
         %{
           "context" => %{
-            "vm" => Enricher.beam_context()
+            "beam" => Enricher.beam_context()
           }
         }
       )
