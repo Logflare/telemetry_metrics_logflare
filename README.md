@@ -1,13 +1,13 @@
 # TelemetryMetricsLogflare
 
-`TelemetryMetricsLogflare` makes it easy to ship individual `Telemetry` events to Logflare to easily search and dashboard your application events.
+`TelemetryMetricsLogflare` makes it easy to ship individual `Telemetry` metrics events to [Logflare](https://logflare.app). Easily search, dashboard and drill down into your application metrics with Logflare.
 
-TelemetryMetricsLogflare does not aggregate metrics in your app. It sends individual events and metadata to Logflare so you can dynamically query your metrics without having to create 10s, 1000s or millions of separate metrics. This lets you drill down to the actual events which make up an aggregation and lets you do dynamic aggregations on historical data.
+TelemetryMetricsLogflare does not aggregate metrics in your app. It sends individual events and metadata to Logflare so you can dynamically query your metrics without having to create 10s, 1000s or millions of separate metrics. This lets you drill down to the actual events which make up an aggregation and lets you do dynamic aggregation on historical data.
 
 ## Example
 
 ### Ecto
-Give me the 99th percentile query time from the `properties` table.
+Give me the 99th percentile total query time of queries from the `properties` table.
 
 Logflare query: `m.ecto.source:"properties" c:p99(m.refinder.repo.query.every.total_time) c:group_by(t::minute)`
 
