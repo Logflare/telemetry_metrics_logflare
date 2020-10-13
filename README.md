@@ -4,6 +4,15 @@
 
 TelemetryMetricsLogflare does not aggregate metrics in your app. It sends individual events and metadata to Logflare so you can dynamically query your metrics without having to create 10s, 1000s or millions of separate metrics. This lets you drill down to the actual events which make up an aggregation and lets you do dynamic aggregations on historical data.
 
+## Example
+
+### Ecto
+Give me the 99th percentile query time from the `properties` table.
+
+Logflare query: `m.ecto.source:"properties" c:p99(m.refinder.repo.query.every.total_time) c:group_by(t::minute)`
+
+![Ecto TelemetryMetricsLogflare example](https://p195.p4.n0.cdn.getcloudapp.com/items/YEuyQpQY/Screen%20Shot%202020-10-13%20at%201.27.03%20PM.png?v=0a731c4ef30658613f8743e54f2351ea)
+
 ## Supported Metrics
 
 ### TelemetryPoller
@@ -37,6 +46,18 @@ https://hexdocs.pm/phoenix/Phoenix.Logger.html#module-instrumentation
 - [ ] `[:phoenix, :socket_connected]`
 - [ ] `[:phoenix, :channel_joined]`
 - [ ] `[:phoenix, :channel_handled_in]`
+- [ ] `[:phoenix, :live_view, :mount, :start]`
+- [ ] `[:phoenix, :live_view, :mount, :stop]`
+- [ ] `[:phoenix, :live_view, :mount, :exception]`
+- [ ] `[:phoenix, :live_view, :handle_params, :start]`
+- [ ] `[:phoenix, :live_view, :handle_params, :stop]`
+- [ ] `[:phoenix, :live_view, :handle_params, :exception]`
+- [ ] `[:phoenix, :live_view, :handle_event, :start]`
+- [ ] `[:phoenix, :live_view, :handle_event, :stop]`
+- [ ] `[:phoenix, :live_view, :handle_event, :exception]`
+- [ ] `[:phoenix, :live_component, :handle_event, :start]`
+- [ ] `[:phoenix, :live_component, :handle_event, :stop]`
+- [ ] `[:phoenix, :live_component, :handle_event, :exception]`
 
 ### Ecto
 https://hexdocs.pm/ecto/Ecto.Repo.html#module-telemetry-events
