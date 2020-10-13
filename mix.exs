@@ -7,7 +7,16 @@ defmodule LogflareTelemetry.MixProject do
       version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: description(),
+      package: package(),
+      name: "Logflare Telemetry Metrics",
+      source_url: "https://github.com/Logflare/logflare_telemetry_ex",
+      homepage_url: "https://logflare.app",
+      docs: [
+        main: "readme",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -45,7 +54,10 @@ defmodule LogflareTelemetry.MixProject do
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:sobelow, ">= 0.0.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.11", only: :test, runtime: false},
-      {:bertex, "~> 1.0"}
+      {:bertex, "~> 1.0"},
+
+      # Docs
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 
