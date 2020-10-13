@@ -61,15 +61,21 @@ defmodule TelemetryMetricsLogflare.Application do
           metrics: metrics(:phoenix),
           tick_interval: 1_000
         },
-        ecto: Map.new(config.ecto) |> Map.merge(%{metrics: metrics(:ecto), tick_interval: 1_000})
+        ecto:
+          Map.new(config.ecto)
+          |> Map.merge(%{metrics: metrics(:ecto, config.ecto), tick_interval: 1_000})
       }
     )
   end
 
-  def metrics(:ecto) do
+  def metrics(:ecto, ecto_config) do
+    application =
+      Keyword.get(ecto_config, :applications) ||
+        raise("Logflare Telemetry Ecto application is NOT configured!")
+
     event_ids = [
-      [:logflare, :repo, :init],
-      [:logflare, :repo, :query]
+      [application, :repo, :init],
+      [application, :repo, :query]
     ]
 
     _measurement_names = ~w[decode_time query_time queue_time total_time]a

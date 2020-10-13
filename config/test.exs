@@ -2,7 +2,7 @@ import Config
 
 config :telemetry_metrics_logflare,
   ecto: [
-    applications: :logflare
+    applications: :test_app
   ],
   url: "localhost:4000",
   api_key: "PtzT2OSVy6LQ",

@@ -3,7 +3,7 @@ defmodule TelemetryMetricsLogflare.EctoReporterTest do
   use Mimic
   alias TelemetryMetricsLogflare.MetricsCache
   doctest TelemetryMetricsLogflare
-  @telem_used_by_app :logflare
+  @telem_used_by_app :test_app
 
   describe "Ecto reporter" do
     test "handles repo query event" do
